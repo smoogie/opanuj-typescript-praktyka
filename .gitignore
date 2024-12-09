@@ -4,3 +4,4 @@ dist
 .env
 html
 utils/progress/data/results.json
+.idea/
