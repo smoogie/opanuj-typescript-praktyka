@@ -1,13 +1,13 @@
 function swapNumbers(a: number, b: number): [number, number] {
-  return [b, a];
+  return swapBox<number>(a, b);
 }
 
 function swapStrings(a: string, b: string): [string, string] {
-  return [b, a];
+  return swapBox<string>(a, b);
 }
 
-export function swapBox(a, b) {
-  throw new Error('Not implemented');
+export function swapBox<T>(a: T, b: T): [T, T] {
+  return [b, a];
 }
 
 const [n1, n2] = swapNumbers(10, 20);
