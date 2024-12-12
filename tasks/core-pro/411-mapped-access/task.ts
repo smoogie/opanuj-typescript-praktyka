@@ -4,6 +4,19 @@ type PagesMap = {
   contact: string;
 };
 
-type PagesAccess = {};
+type BooleanMap<T> = {
+  [K in keyof T]: boolean;
+}
 
-export function checkAccess(map: PagesMap): PagesAccess {}
+type PagesAccess = BooleanMap<PagesMap>;
+
+export function checkAccess(map: PagesMap): PagesAccess {
+   const access: PagesAccess = {} as PagesAccess;
+   let values = [];
+    for (const key in map) {
+      const value = map[key as keyof PagesMap]
+      access[key as keyof PagesAccess] = value !== '' && !values.includes(value);
+      values.push(value);
+    }
+    return access;
+}
