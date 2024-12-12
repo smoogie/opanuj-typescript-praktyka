@@ -69,5 +69,35 @@ export class ProductRepository {
     return res.rows[0];
   }
 }
+export class Repository<T extends { id?: number }> {
+  private dataAccess: DataAccess;
+  private tableName: string;
 
-export class Repository<T extends { id?: number }> {}
+  constructor(dataAccess: DataAccess, tableName: string) {
+    this.dataAccess = dataAccess;
+    this.tableName = tableName;
+  }
+
+  async getById(id: number) {
+    const query = `SELECT * FROM ${this.tableName} WHERE id = $1`;
+    const values = [id];
+    const res = await this.dataAccess.query<T>(query, values);
+    return res.rows[0];
+  }
+
+  async getAll() {
+    const query = `SELECT * FROM ${this.tableName}`;
+    const res = await this.dataAccess.query<T>(query);
+    return res.rows;
+  }
+
+  async insert(entity: Omit<T, 'id'>) {
+    const columns = Object.keys(entity);
+    const values = Object.values(entity);
+    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+    const query = `INSERT INTO ${this.tableName} (${columns.join(', ')}) VALUES (${placeholders}) RETURNING *`;
+    const res = await this.dataAccess.query<T>(query, values);
+    return res.rows[0];
+  }
+}
+

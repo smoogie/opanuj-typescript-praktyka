@@ -55,4 +55,12 @@ class RedditIdentityProcessor {
   }
 }
 
-export class IdentityProcessor {}
+export class IdentityProcessor {
+  constructor(private provider: 'google' | 'apple' | 'reddit') {}
+  findById<T>(id: string): T | undefined {
+    return users.find((user) => user.id === id && user.provider == this.provider) as T | undefined;
+  }
+  findByUserName<T>(userName: string): T | undefined {
+    return users.find((user) => user.userName === userName && user.provider == this.provider) as T | undefined;
+  }
+}
